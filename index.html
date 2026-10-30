@@ -143,7 +143,7 @@
         // =========================================================
         
         // GANTI TULISAN DI BAWAH INI DENGAN LINK APPS SCRIPT BAPAK!
-        const API_URL = "MASUKKAN_LINK_APPS_SCRIPT_DISINI"; 
+        const API_URL = "https://script.google.com/macros/s/AKfycbzCJkW4kg8Q7h-I8mBtEdloaLSwe4Krbpz7W75N_ZKsEvP1HKFooXp0-89ngC3FMR8W/exec"; 
         
         async function muatDataDariSheets() {
             const container = document.getElementById('aplikasi-container');
@@ -160,7 +160,7 @@
                 // Cetak kartu aplikasi satu per satu
                 daftarAplikasi.forEach((app, index) => {
                     const delay = 0.2 + (index * 0.1);
-                    const linkBelumSiap = app.link === "#" || app.link === "" || app.link.includes("https://script.google.com/macros/s/AKfycbzCJkW4kg8Q7h-I8mBtEdloaLSwe4Krbpz7W75N_ZKsEvP1HKFooXp0-89ngC3FMR8W/exec");
+                    const linkBelumSiap = app.link === "#" || app.link === "" || app.link.includes("MASUKKAN-LINK");
                     
                     const atributKlik = linkBelumSiap 
                         ? `href="#" onclick="tampilkanNotif(event)"` 
