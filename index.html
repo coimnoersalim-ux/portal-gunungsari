@@ -13,10 +13,7 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
         
         /* Background Grid Modern */
-        .bg-grid {
-            background-size: 40px 40px;
-            background-image: radial-gradient(circle, #cbd5e1 1px, transparent 1px);
-        }
+        .bg-grid { background-size: 40px 40px; background-image: radial-gradient(circle, #cbd5e1 1px, transparent 1px); }
 
         /* Animasi Cahaya Bergerak */
         @keyframes blob { 0% { transform: translate(0px, 0px) scale(1); } 33% { transform: translate(30px, -50px) scale(1.1); } 66% { transform: translate(-20px, 20px) scale(0.9); } 100% { transform: translate(0px, 0px) scale(1); } }
@@ -24,11 +21,25 @@
         .animation-delay-2000 { animation-delay: 2s; }
         .animation-delay-4000 { animation-delay: 4s; }
         
+        /* 🌟 ANIMASI BARU: GELEMBUNG PARTIKEL KACA (FLOATING PARTICLES) 🌟 */
+        .particles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; pointer-events: none; }
+        .particle { position: absolute; display: block; background: rgba(99, 102, 241, 0.1); backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.5); border-radius: 50%; animation: rise linear infinite; bottom: -150px; }
+        .particle:nth-child(1) { left: 10%; width: 60px; height: 60px; animation-duration: 9s; }
+        .particle:nth-child(2) { left: 25%; width: 120px; height: 120px; animation-duration: 14s; animation-delay: 2s; }
+        .particle:nth-child(3) { left: 40%; width: 45px; height: 45px; animation-duration: 7s; animation-delay: 4s; }
+        .particle:nth-child(4) { left: 65%; width: 80px; height: 80px; animation-duration: 11s; }
+        .particle:nth-child(5) { left: 80%; width: 70px; height: 70px; animation-duration: 15s; animation-delay: 1s; }
+        .particle:nth-child(6) { left: 90%; width: 100px; height: 100px; animation-duration: 12s; animation-delay: 3s; }
+        @keyframes rise {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-1200px) rotate(360deg); opacity: 0; }
+        }
+
         /* Animasi Muncul Elegan */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
         .fade-in-up { animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
         
-        /* Animasi Marquee / Running Text */
+        /* Animasi Running Text */
         .marquee-container { overflow: hidden; white-space: nowrap; width: 100%; }
         .marquee-content { display: inline-block; animation: marquee 30s linear infinite; }
         .marquee-container:hover .marquee-content { animation-play-state: paused; }
@@ -63,7 +74,7 @@
 </head>
 <body class="text-slate-800 min-h-screen relative selection:bg-indigo-500/30 overflow-x-hidden">
 
-    <!-- Audio Player (Tersembunyi) -->
+    <!-- Audio Player -->
     <audio id="bg-music" loop preload="auto">
         <source src="tanah_airku.mp3" type="audio/mpeg">
     </audio>
@@ -107,33 +118,40 @@
         </div>
     </div>
 
-    <!-- Latar Belakang Modern (Grid + Cahaya Baur) -->
+    <!-- Latar Belakang Modern (Grid + Cahaya Baur + GELEMBUNG PARTIKEL) -->
     <div class="fixed inset-0 z-0 pointer-events-none bg-grid opacity-40"></div>
-    <div class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none flex justify-center items-center overflow-hidden opacity-60 mix-blend-multiply">
+    <div class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none flex justify-center items-center overflow-hidden opacity-50 mix-blend-multiply">
         <div class="absolute -top-20 -left-20 w-[40rem] h-[40rem] bg-indigo-200 rounded-full filter blur-[100px] animate-blob"></div>
         <div class="absolute top-[10%] -right-20 w-[35rem] h-[35rem] bg-teal-200 rounded-full filter blur-[100px] animate-blob animation-delay-2000"></div>
         <div class="absolute -bottom-40 left-[20%] w-[40rem] h-[40rem] bg-blue-200 rounded-full filter blur-[100px] animate-blob animation-delay-4000"></div>
     </div>
+    
+    <!-- Elemen Gelembung Melayang -->
+    <div class="particles-container">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
 
-    <!-- FLOATING ISLAND HEADER (Desain Modern) -->
+    <!-- FLOATING ISLAND HEADER -->
     <header class="fixed top-6 left-0 right-0 z-40 px-4 transition-all">
         <div class="max-w-5xl mx-auto">
-            <!-- Kotak Kaca Mengambang -->
-            <div class="bg-white/60 backdrop-blur-2xl border border-white rounded-[2rem] p-3 flex flex-col sm:flex-row justify-between items-center shadow-[0_8px_30px_rgb(0,0,0,0.06)] gap-4 sm:gap-0">
+            <div class="bg-white/70 backdrop-blur-2xl border border-white rounded-[2rem] p-3 flex flex-col sm:flex-row justify-between items-center shadow-[0_8px_30px_rgb(0,0,0,0.06)] gap-4 sm:gap-0">
                 
-                <!-- Profil Kades -->
-                <div class="flex items-center gap-4 bg-white/50 px-4 py-2 rounded-3xl border border-white/60">
+                <div class="flex items-center gap-4 bg-white/60 px-4 py-2 rounded-3xl border border-white/60">
                     <div class="relative">
                         <img src="kades.jpg" alt="Kepala Desa Gunungsari" class="w-11 h-11 rounded-full object-cover border-2 border-white shadow-sm bg-slate-200">
                         <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-400 border-2 border-white rounded-full"></span>
                     </div>
                     <div>
-                        <p class="text-[9px] font-black text-indigo-500 uppercase tracking-widest mb-0.5">Kepala Desa</p>
+                        <p class="text-[9px] font-black text-indigo-600 uppercase tracking-widest mb-0.5">Kepala Desa</p>
                         <p class="text-sm font-extrabold text-slate-800 leading-none">Irpan Adri Nugraha, S.P</p>
                     </div>
                 </div>
 
-                <!-- Running Text (Ditaruh di tengah Island) -->
                 <div class="hidden md:block w-96 mx-4 px-4 py-2 bg-slate-900/5 rounded-2xl border border-slate-900/5 overflow-hidden">
                     <div class="marquee-container text-xs font-semibold text-slate-600">
                         <div class="marquee-content">
@@ -142,8 +160,7 @@
                     </div>
                 </div>
 
-                <!-- Jam Digital -->
-                <div class="flex items-center gap-3 bg-white/50 px-5 py-2.5 rounded-3xl border border-white/60">
+                <div class="flex items-center gap-3 bg-white/60 px-5 py-2.5 rounded-3xl border border-white/60">
                     <div class="text-right">
                         <div id="live-time" class="text-lg font-black text-slate-800 tabular-nums tracking-tighter leading-none mb-1">00:00:00</div>
                         <div id="live-date" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider leading-none">Memuat...</div>
@@ -155,9 +172,7 @@
 
     <main class="relative z-10 max-w-5xl mx-auto px-6 pt-44 pb-20">
         
-        <!-- BAGIAN JUDUL & LOGO -->
         <div class="text-center mb-16 fade-in-up" style="animation-delay: 0.1s;">
-            <!-- Badge Modern -->
             <div class="inline-flex items-center gap-3 bg-white/60 backdrop-blur-xl text-slate-700 text-xs font-extrabold uppercase tracking-widest px-6 py-3 rounded-full mb-12 border border-white shadow-sm">
                 <span class="flex h-2.5 w-2.5 relative">
                   <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -179,16 +194,13 @@
             </p>
         </div>
 
-        <!-- Wadah Kartu Aplikasi -->
         <div id="aplikasi-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 pb-10">
-            <!-- Animasi Loading -->
             <div id="loading-spinner" class="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col items-center justify-center py-16">
                 <div class="w-12 h-12 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin shadow-lg"></div>
                 <p class="mt-6 text-sm text-slate-500 font-bold tracking-wide animate-pulse uppercase">Mensinkronkan Database...</p>
             </div>
         </div>
 
-        <!-- Footer Modern -->
         <div class="mt-12 pt-8 border-t border-slate-200/60 text-center fade-in-up" style="animation-delay: 0.6s;">
             <p class="text-sm font-bold text-slate-400">© 2026 Pemerintahan Desa Gunungsari</p>
             <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-widest">Dikelola oleh Kasipem & Operator Desa</p>
@@ -197,7 +209,7 @@
 
     <script>
         // =========================================================
-        // 1. SCRIPT MUSIK OTOMATIS & TOMBOL
+        // 1. SCRIPT MUSIK OTOMATIS (DIPERKUAT AGAR TIDAK GAGAL)
         // =========================================================
         const bgMusic = document.getElementById('bg-music');
         const musicToggle = document.getElementById('music-toggle');
@@ -205,34 +217,41 @@
         const musicIndicator = document.getElementById('music-indicator');
         let isMusicPlaying = false;
 
-        // Fungsi Putar / Jeda
         function toggleMusic() {
             if (isMusicPlaying) {
                 bgMusic.pause();
                 musicIcon.classList.replace('spin-slow', 'spin-paused');
                 musicIndicator.classList.replace('bg-emerald-400', 'bg-red-500');
+                isMusicPlaying = false;
             } else {
-                bgMusic.play().catch(e => console.log("Menunggu interaksi pengguna"));
-                musicIcon.classList.replace('spin-paused', 'spin-slow');
-                musicIndicator.classList.replace('bg-red-500', 'bg-emerald-400');
+                let playPromise = bgMusic.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        musicIcon.classList.replace('spin-paused', 'spin-slow');
+                        musicIndicator.classList.replace('bg-red-500', 'bg-emerald-400');
+                        isMusicPlaying = true;
+                    }).catch(error => {
+                        console.log("Menunggu interaksi pengguna untuk memutar lagu.");
+                    });
+                }
             }
-            isMusicPlaying = !isMusicPlaying;
         }
 
-        // Event Tombol Musik
         musicToggle.addEventListener('click', (e) => {
-            e.stopPropagation(); // Mencegah bentrok dengan klik layar
+            e.stopPropagation(); 
             toggleMusic();
         });
 
-        // Trik Cerdas: Musik otomatis main saat layar pertama kali disentuh/diklik (Mengakali aturan Browser)
-        document.body.addEventListener('click', function playOnFirstInteraction() {
-            if (!isMusicPlaying) {
-                toggleMusic();
-            }
-            // Hapus pendeteksi setelah klik pertama agar tidak mengganggu klik menu
-            document.body.removeEventListener('click', playOnFirstInteraction);
-        }, { once: true });
+        // Trigger otomatis cerdas: Musik nyala saat pengguna klik atau scroll layar
+        const startAudio = () => {
+            if (!isMusicPlaying) toggleMusic();
+            document.removeEventListener('click', startAudio);
+            document.removeEventListener('scroll', startAudio);
+            document.removeEventListener('touchstart', startAudio);
+        };
+        document.addEventListener('click', startAudio);
+        document.addEventListener('scroll', startAudio);
+        document.addEventListener('touchstart', startAudio);
 
 
         // =========================================================
@@ -252,7 +271,7 @@
 
 
         // =========================================================
-        // 3. SCRIPT NOTIFIKASI PENGEMBANGAN
+        // 3. SCRIPT NOTIFIKASI
         // =========================================================
         let notifTimeout;
         function tampilkanNotif(event) {
@@ -284,7 +303,6 @@
                 
                 spinner.style.display = 'none'; 
                 
-                // INJEKSI SUB-MENU OTOMATIS
                 globalDaftarAplikasi.forEach((app) => {
                     if (app.nama && app.nama.toLowerCase().includes("pelayanan")) {
                         app.subMenu = [
@@ -305,7 +323,6 @@
                     }
                 });
                 
-                // Render Kartu Aplikasi dengan Desain Soft-Glass Baru
                 globalDaftarAplikasi.forEach((app, index) => {
                     if (!app.nama) return; 
                     
@@ -327,9 +344,7 @@
                     const cardHTML = `
                         <div class="fade-in-up h-full" style="animation-delay: ${delay}s;">
                             <a ${atributKlik} class="group relative flex flex-col h-full bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] ${app.warnaGlow} hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] rounded-[2rem] p-7 transition-all duration-500 hover:-translate-y-2 overflow-hidden cursor-pointer">
-                                
                                 <div class="absolute -top-12 -right-12 w-40 h-40 bg-gradient-to-br from-white/80 to-transparent rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
-                                
                                 <div class="relative z-10 flex items-center justify-between mb-6">
                                     <div class="flex-shrink-0 w-16 h-16 ${app.bgIkon} rounded-[1.25rem] flex items-center justify-center text-3xl shadow-sm border border-white/80 group-hover:scale-110 transition-transform duration-500">
                                         ${app.ikon}
@@ -338,7 +353,6 @@
                                         <svg class="w-5 h-5 transform ${punyaSubMenu ? 'group-hover:translate-y-1' : 'group-hover:translate-x-1 group-hover:-translate-y-1'} transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">${ikonPanah}</svg>
                                     </div>
                                 </div>
-                                
                                 <div class="relative z-10 flex-grow">
                                     <h3 class="text-xl font-extrabold text-slate-800 group-hover:text-slate-900 mb-2 transition-colors duration-300 tracking-tight">${app.nama}</h3>
                                     <p class="text-[13px] font-semibold text-slate-500 leading-relaxed">${app.deskripsi}</p>
@@ -404,7 +418,6 @@
             }, 400);
         }
 
-        // Jalankan saat web dibuka
         muatDataDariSheets();
     </script>
 </body>
