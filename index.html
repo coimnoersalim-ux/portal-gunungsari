@@ -61,7 +61,8 @@
         .toast-leave { transform: translate(-50%, -20px); opacity: 0; pointer-events: none; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen relative overflow-x-hidden selection:bg-indigo-500/30">
+<!-- PENTING: overflow-x-hidden sudah dihapus dari body agar sticky berfungsi -->
+<body class="bg-slate-50 text-slate-800 min-h-screen relative selection:bg-indigo-500/30">
 
     <!-- Notifikasi Melayang (Tampil saat menu belum siap) -->
     <div id="notif-pengembangan" class="fixed top-24 left-1/2 toast-leave bg-slate-900/95 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-2xl z-50 flex items-center gap-3 transition-all duration-300 border border-slate-700">
@@ -131,7 +132,7 @@
                   <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
                   <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
                 </span>
-                Sistem Portal Aplikasi Perangkat Desa Gunungsari
+                Sistem Internal Perangkat Desa
             </div>
             
             <div class="flex justify-center mb-6">
@@ -237,23 +238,7 @@
                 ikon: "🌐",
                 warnaGlow: "group-hover:shadow-indigo-500/20",
                 bgIkon: "bg-indigo-50 text-indigo-600"
-            },
-            {
-                nama: "Pendataan Indeks Desa",
-                deskripsi: "Hasil Pendataan Indeks Desa",
-                link: "https://script.google.com/macros/s/AKfycbxL6z6THc2gANgbd-R1IQScRI27M0L75bkF0fHexLvSGdlky30qUbNU5ADGLnyKB6FcWw/exec",
-                ikon: "🏢",
-                warnaGlow: "group-hover:shadow-indigo-500/20",
-                bgIkon: "bg-indigo-50 text-indigo-600"
-             },
-            {
-                nama: "Tapal Desa-Pengajuan Usulan Banprov",
-                deskripsi: "Aplikasi Pengajuan Usulan Banprov",
-                link: "https://tapaldesa.jabarprov.go.id/login",
-                ikon: "💵",
-                warnaGlow: "group-hover:shadow-indigo-500/20",
-                bgIkon: "bg-indigo-50 text-indigo-600"
-            {
+            }
         ];
 
         // 4. Mesin Perender Kartu
