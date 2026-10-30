@@ -33,7 +33,7 @@
         }
         .animate-float { animation: float 4s ease-in-out infinite; }
 
-        /* Animasi Kilauan Logo TV untuk Tulisan Portal Gunungsari */
+        /* Animasi Kilauan Logo TV untuk Tulisan Keseluruhan */
         .tv-logo-shine {
             background: linear-gradient(
                 120deg, 
@@ -134,11 +134,12 @@
             
             <div class="relative flex justify-center mb-8">
                 <div class="absolute w-32 h-32 bg-gradient-to-r from-yellow-300 via-green-400 to-blue-500 rounded-full blur-2xl opacity-60 animate-pulse"></div>
-                <img src="logo.jpg" alt="Logo Pemkab Tasikmalaya" class="relative w-28 sm:w-32 h-auto object-contain animate-float drop-shadow-lg transition-transform duration-500 hover:scale-110 z-10 mix-blend-multiply contrast-125">
+                <!-- Gambar diset jadi logo.png, drop-shadow diperjelas, dan mix-blend dihapus agar warna asli keluar -->
+                <img src="logo.png" alt="Logo Pemkab Tasikmalaya" class="relative w-28 sm:w-32 h-auto object-contain animate-float drop-shadow-2xl transition-transform duration-500 hover:scale-110 z-10">
             </div>
             
-            <!-- TULISAN PORTAL DENGAN EFEK KILAUAN TV LOGO -->
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-slate-900 tracking-tight drop-shadow-md">
+            <!-- TULISAN PORTAL GUNUNGSARI FULL BERKILAU -->
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight drop-shadow-md">
                 <span class="tv-logo-shine">Portal Gunungsari</span>
             </h1>
             <p class="text-slate-600 max-w-xl mx-auto text-lg leading-relaxed">
@@ -146,7 +147,6 @@
             </p>
         </div>
 
-        <!-- Wadah Kartu Aplikasi & Animasi Loading -->
         <div id="aplikasi-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-10">
             <div id="loading-spinner" class="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col items-center justify-center py-12">
                 <div class="w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
@@ -190,8 +190,6 @@
         // =========================================================
         // 3. MESIN PENARIK DATA DARI GOOGLE SHEETS
         // =========================================================
-        
-        // Link API Google Sheets (SUDAH TERSAMBUNG KEMBALI)
         const API_URL = "https://script.google.com/macros/s/AKfycbzCJkW4kg8Q7h-I8mBtEdloaLSwe4Krbpz7W75N_ZKsEvP1HKFooXp0-89ngC3FMR8W/exec"; 
         
         let globalDaftarAplikasi = [];
@@ -206,9 +204,7 @@
                 
                 spinner.style.display = 'none'; 
                 
-                // INJEKSI SUB-MENU OTOMATIS
                 globalDaftarAplikasi.forEach((app) => {
-                    // Cek jika nama ada tulisan "pelayanan"
                     if (app.nama && app.nama.toLowerCase().includes("pelayanan")) {
                         app.subMenu = [
                             { nama: "Surat Keterangan Usaha (SKU)", link: "#" },
@@ -217,7 +213,6 @@
                             { nama: "Pembuatan Pengantar KTP / KK", link: "#" }
                         ];
                     }
-                    // Cek jika nama ada tulisan "penduduk"
                     if (app.nama && app.nama.toLowerCase().includes("penduduk")) {
                         app.subMenu = [
                             { nama: "Input Data Penduduk", link: "#" },
@@ -229,7 +224,6 @@
                     }
                 });
                 
-                // Cetak kartu
                 globalDaftarAplikasi.forEach((app, index) => {
                     if (!app.nama) return; 
                     
