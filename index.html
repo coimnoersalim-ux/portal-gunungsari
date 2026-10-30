@@ -3,141 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Aplikasi - Desa Gunungsari</title>
+    <title>Portal Internal - Desa Gunungsari</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Import Font Premium: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        /* Animasi masuk untuk elemen */
-        @keyframes fadeUp {
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        /* Animasi Latar Belakang */
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob {
+            animation: blob 7s infinite;
+        }
+        .animation-delay-2000 { animation-delay: 2s; }
+        .animation-delay-4000 { animation-delay: 4s; }
+        
+        /* Animasi Muncul Halus */
+        @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .animate-fade-up {
-            animation: fadeUp 0.6s ease-out forwards;
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
             opacity: 0;
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-300 font-sans min-h-screen relative overflow-x-hidden selection:bg-blue-500/30">
+<body class="bg-slate-50 text-slate-800 min-h-screen relative overflow-x-hidden selection:bg-indigo-500/30">
 
-    <!-- Latar Belakang Video Full Layar -->
-    <!-- Ganti tulisan latar.mp4 dengan link video Anda atau nama file video yang Anda unggah -->
-    <video autoplay loop muted playsinline class="fixed top-0 left-0 w-full h-full object-cover z-0 pointer-events-none">
-        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-        Video tidak didukung oleh browser Anda.
-    </video>
+    <!-- Latar Belakang Cahaya Bergerak (Mesh Gradient) -->
+    <div class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none flex justify-center items-center overflow-hidden opacity-60">
+        <div class="absolute top-[-10%] left-[-10%] w-[30rem] h-[30rem] bg-indigo-300 rounded-full mix-blend-multiply filter blur-[80px] animate-blob"></div>
+        <div class="absolute top-[20%] right-[-10%] w-[30rem] h-[30rem] bg-teal-300 rounded-full mix-blend-multiply filter blur-[80px] animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-32 left-[20%] w-[30rem] h-[30rem] bg-blue-300 rounded-full mix-blend-multiply filter blur-[80px] animate-blob animation-delay-4000"></div>
+    </div>
 
-    <!-- Lapisan Gelap (Overlay) agar tulisan tetap terbaca jelas -->
-    <div class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none bg-slate-950/70 backdrop-blur-sm"></div>
-
-    <!-- Konten Utama -->
-    <div class="relative z-10 max-w-5xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-6xl mx-auto px-6 py-12">
         
-        <!-- Header -->
-        <div class="text-center mb-16 animate-fade-up" style="animation-delay: 0.1s;">
-            <div class="inline-flex items-center gap-2 bg-red-500/20 text-red-300 text-xs font-bold px-4 py-1.5 rounded-full mb-8 border border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.2)] backdrop-blur-md">
-                <span class="animate-pulse">🔴</span> Aplikasi Khusus Perangkat Desa Gunungsari
+        <!-- Bagian Header -->
+        <div class="text-center mb-16 fade-in-up" style="animation-delay: 0.1s;">
+            <!-- Lencana Status -->
+            <div class="inline-flex items-center gap-2 bg-white/80 backdrop-blur-md text-indigo-700 text-sm font-bold px-5 py-2 rounded-full mb-8 border border-white shadow-sm hover:shadow-md transition-shadow cursor-default">
+                <span class="flex h-3 w-3 relative">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+                </span>
+                Sistem Internal Perangkat Desa
             </div>
             
             <div class="flex justify-center mb-6">
-                <!-- Ikon gedung dengan efek miring 3D -->
-                <div class="relative inline-flex items-center justify-center w-24 h-24 bg-white/10 rounded-2xl shadow-2xl border border-white/20 backdrop-blur-xl transform rotate-3 hover:rotate-0 transition-all duration-300">
-                    <div class="absolute inset-0 bg-gradient-to-tr from-blue-500/30 to-emerald-500/30 rounded-2xl"></div>
-                    <span class="text-5xl relative z-10">🏢</span>
+                <div class="relative inline-flex items-center justify-center w-24 h-24 bg-white rounded-3xl shadow-xl border border-white/50 transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+                    <span class="text-5xl drop-shadow-sm">🏛️</span>
                 </div>
             </div>
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight text-white drop-shadow-lg">
-                Portal Internal <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">Gunungsari</span>
+            
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-slate-900 tracking-tight drop-shadow-sm">
+                Portal <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-teal-500">Gunungsari</span>
             </h1>
-            <p class="text-slate-300 max-w-xl mx-auto text-lg drop-shadow-md">Pusat akses sistem informasi dan operasional administrasi terpadu.</p>
+            <p class="text-slate-600 max-w-xl mx-auto text-lg leading-relaxed">
+                Pusat akses layanan digital terpadu untuk efisiensi operasional dan administrasi Pemerintahan Desa.
+            </p>
         </div>
 
-        <!-- Container untuk Menu Aplikasi -->
-        <div id="aplikasi-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Kartu menu dimunculkan oleh script -->
+        <!-- Wadah Kartu Aplikasi -->
+        <div id="aplikasi-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-10">
+            <!-- Kartu otomatis dibuat oleh JavaScript -->
         </div>
 
-        <!-- Footer -->
-        <div class="mt-20 text-center text-sm text-slate-400 animate-fade-up drop-shadow-md" style="animation-delay: 0.8s;">
-            <p>&copy; 2026 Pemerintahan Desa Gunungsari. Dikelola oleh Kasipem & Operator Desa.</p>
+        <!-- Bagian Footer -->
+        <div class="mt-12 pt-8 border-t border-slate-200/50 text-center text-sm text-slate-500 fade-in-up" style="animation-delay: 0.8s;">
+            <p class="font-medium">© 2026 Pemerintahan Desa Gunungsari</p>
+            <p class="mt-1">Dikelola oleh Kasipem & Operator Desa</p>
         </div>
     </div>
 
     <!-- ======================================================= -->
-    <!-- SCRIPT PENGATURAN MENU -->
+    <!-- SCRIPT DATA APLIKASI -->
     <!-- ======================================================= -->
     <script>
         const daftarAplikasi = [
             {
                 nama: "SIPERTA",
-                deskripsi: "Manajemen data kepemilikan dan klasifikasi lahan desa.",
+                deskripsi: "Manajemen data kepemilikan dan pemetaan klasifikasi lahan desa.",
                 link: "https://siperta-desa-gunungsari.vercel.app/",
                 ikon: "🗺️", 
-                warnaBercak: "from-emerald-500/30 to-emerald-500/0",
-                warnaIkon: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
+                warnaGlow: "group-hover:shadow-emerald-500/20",
+                bgIkon: "bg-emerald-50 text-emerald-600"
             },
             {
                 nama: "Sistem Kearsipan",
-                deskripsi: "Database surat masuk/keluar dan arsip administrasi kependudukan.",
+                deskripsi: "Database surat menyurat dan pencatatan arsip administrasi warga.",
                 link: "https://script.google.com/macros/s/AKfycbyMXyYFHq3X5sZSq_OhI3JjBT78jn58DPJnda5ZcqgKnesvUD1aKMK1mHwo3ec1UHjZDA/exec",
                 ikon: "📂",
-                warnaBercak: "from-blue-500/30 to-blue-500/0",
-                warnaIkon: "bg-blue-500/20 text-blue-300 border-blue-500/30"
+                warnaGlow: "group-hover:shadow-blue-500/20",
+                bgIkon: "bg-blue-50 text-blue-600"
             },
             {
                 nama: "Dashboard Pelayanan",
                 deskripsi: "Panel operator untuk memproses permohonan layanan satu pintu.",
                 link: "MASUKKAN-LINK-APPSHEET-DISINI",
                 ikon: "💻",
-                warnaBercak: "from-purple-500/30 to-purple-500/0",
-                warnaIkon: "bg-purple-500/20 text-purple-300 border-purple-500/30"
+                warnaGlow: "group-hover:shadow-purple-500/20",
+                bgIkon: "bg-purple-50 text-purple-600"
             },
             {
                 nama: "Rekap PBB-P2",
-                deskripsi: "Monitoring progres penagihan dan pelunasan pajak bumi bangunan.",
+                deskripsi: "Monitoring progres penagihan dan status pelunasan pajak.",
                 link: "MASUKKAN-LINK-PBB-DISINI",
                 ikon: "💳",
-                warnaBercak: "from-rose-500/30 to-rose-500/0",
-                warnaIkon: "bg-rose-500/20 text-rose-300 border-rose-500/30"
+                warnaGlow: "group-hover:shadow-rose-500/20",
+                bgIkon: "bg-rose-50 text-rose-600"
             },
-             {
-                nama: "Website Desa Gunungsari",
-                deskripsi: "Website Resmi Pemerintah Desa Gunungsari, Kecamatan Cikatomas, Kabupaten Tasikmalaya.",
+            {
+                nama: "Website Desa",
+                deskripsi: "Situs publik resmi Pemerintah Desa Gunungsari, Cikatomas.",
                 link: "https://gunungsari-tasikmalaya.desa.id/",
                 ikon: "🌐",
-                warnaBercak: "from-teal-500/30 to-teal-500/0",
-                warnaIkon: "bg-teal-500/20 text-teal-300 border-teal-500/30"
+                warnaGlow: "group-hover:shadow-indigo-500/20",
+                bgIkon: "bg-indigo-50 text-indigo-600"
             }
         ];
 
-        // MESIN PEMBUAT TAMPILAN
+        // Mesin Perender Kartu
         const container = document.getElementById('aplikasi-container');
         
         daftarAplikasi.forEach((app, index) => {
             const delay = 0.2 + (index * 0.1);
             
             const cardHTML = `
-                <a href="${app.link}" target="_blank" class="animate-fade-up block group relative p-[1px] rounded-2xl bg-gradient-to-b from-white/20 to-white/5 hover:from-white/30 hover:to-white/10 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.3)]" style="animation-delay: ${delay}s;">
-                    <!-- Efek Glow di belakang kartu saat dihover -->
-                    <div class="absolute inset-0 rounded-2xl bg-gradient-to-br ${app.warnaBercak} opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
-                    <div class="relative h-full bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-xl p-6 overflow-hidden">
-                        <div class="flex flex-col h-full relative z-10">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex-shrink-0 w-14 h-14 ${app.warnaIkon} border rounded-2xl flex items-center justify-center text-2xl shadow-inner transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
-                                    ${app.ikon}
-                                </div>
-                                <!-- Panah animasi di pojok kanan -->
-                                <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-slate-400 group-hover:text-white group-hover:bg-white/20 transition-all duration-300">
-                                    <svg class="w-4 h-4 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                </div>
+                <div class="fade-in-up h-full" style="animation-delay: ${delay}s;">
+                    <a href="${app.link}" target="_blank" class="group relative flex flex-col h-full bg-white/70 backdrop-blur-xl border border-white shadow-lg ${app.warnaGlow} hover:shadow-2xl rounded-3xl p-7 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+                        
+                        <!-- Efek Hiasan Bulat di Sudut Kanan Atas -->
+                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-white to-transparent rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
+
+                        <div class="relative z-10 flex items-center justify-between mb-5">
+                            <div class="flex-shrink-0 w-16 h-16 ${app.bgIkon} rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-black/5 group-hover:scale-110 transition-transform duration-500">
+                                ${app.ikon}
                             </div>
-                            <div>
-                                <h3 class="text-xl font-bold text-slate-100 group-hover:text-white mb-2 transition-colors">${app.nama}</h3>
-                                <p class="text-sm text-slate-300 leading-relaxed">${app.deskripsi}</p>
+                            
+                            <!-- Ikon Panah yang Muncul saat Hover -->
+                            <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-indigo-600 group-hover:text-white shadow-sm transition-all duration-300">
+                                <svg class="w-5 h-5 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
                             </div>
                         </div>
-                    </div>
-                </a>
+                        
+                        <div class="relative z-10 flex-grow">
+                            <h3 class="text-xl font-bold text-slate-800 group-hover:text-indigo-600 mb-3 transition-colors duration-300">${app.nama}</h3>
+                            <p class="text-sm font-medium text-slate-500 leading-relaxed">${app.deskripsi}</p>
+                        </div>
+                    </a>
+                </div>
             `;
             container.innerHTML += cardHTML;
         });
