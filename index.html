@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Aplikasi - Desa Gunungsari</title>
+    <title>Portal Internal - Desa Gunungsari</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Import Font Premium: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,6 +36,24 @@
             animation: fadeInUp 0.6s ease-out forwards;
             opacity: 0;
         }
+
+        /* Animasi Running Text */
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 25s linear infinite;
+        }
+        .marquee-container:hover .marquee-content {
+            animation-play-state: paused;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen relative overflow-x-hidden selection:bg-indigo-500/30">
@@ -47,11 +65,46 @@
         <div class="absolute -bottom-32 left-[20%] w-[30rem] h-[30rem] bg-blue-300 rounded-full mix-blend-multiply filter blur-[80px] animate-blob animation-delay-4000"></div>
     </div>
 
-    <div class="relative z-10 max-w-6xl mx-auto px-6 py-12">
+    <!-- Running Text (Informasi Berjalan) -->
+    <div class="relative z-20 bg-indigo-600 text-white text-sm font-medium py-2 shadow-md">
+        <div class="marquee-container">
+            <div class="marquee-content">
+                Selamat Datang di Portal Internal Aplikasi Pemerintahan Desa Gunungsari, Kecamatan Cikatomas, Kabupaten Tasikmalaya. | Gunakan sistem ini dengan bijak untuk efisiensi pelayanan masyarakat. | Jam kerja operasional pelayanan: Senin - Jumat (08:00 - 15:00 WIB).
+            </div>
+        </div>
+    </div>
+
+    <div class="relative z-10 max-w-6xl mx-auto px-6 py-8">
         
-        <!-- Bagian Header -->
-        <div class="text-center mb-16 fade-in-up" style="animation-delay: 0.1s;">
-            <!-- Lencana Status -->
+        <!-- Top Bar: Profil Kades & Jam Digital -->
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-10 fade-in-up" style="animation-delay: 0.1s;">
+            
+            <!-- Profil Kepala Desa -->
+            <div class="flex items-center gap-4 bg-white/70 backdrop-blur-md px-5 py-3 rounded-2xl shadow-sm border border-white hover:shadow-md transition-shadow">
+                <div class="relative">
+                    <!-- Foto Kepala Desa -->
+                    <img src="SELAMAT HUT TNI KE 80.jpg" alt="Kepala Desa Gunungsari" class="w-14 h-14 rounded-full object-cover border-2 border-indigo-500 shadow-sm">
+                    <span class="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></span>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Kepala Desa</p>
+                    <p class="text-sm font-bold text-slate-800">Irpan Adri Nugraha, S.P</p>
+                </div>
+            </div>
+
+            <!-- Jam & Kalender Digital -->
+            <div class="flex items-center gap-4 bg-white/70 backdrop-blur-md px-5 py-3 rounded-2xl shadow-sm border border-white hover:shadow-md transition-shadow">
+                <div class="text-3xl text-indigo-500 drop-shadow-sm">⏱️</div>
+                <div class="text-right">
+                    <div id="live-time" class="text-xl font-bold text-slate-800 tabular-nums tracking-tight">00:00:00</div>
+                    <div id="live-date" class="text-xs font-semibold text-slate-500">Memuat tanggal...</div>
+                </div>
+            </div>
+
+        </div>
+        
+        <!-- Bagian Header Utama -->
+        <div class="text-center mb-16 fade-in-up" style="animation-delay: 0.2s;">
             <div class="inline-flex items-center gap-2 bg-white/80 backdrop-blur-md text-indigo-700 text-sm font-bold px-5 py-2 rounded-full mb-8 border border-white shadow-sm hover:shadow-md transition-shadow cursor-default">
                 <span class="flex h-3 w-3 relative">
                   <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
@@ -87,9 +140,29 @@
     </div>
 
     <!-- ======================================================= -->
-    <!-- SCRIPT DATA APLIKASI -->
+    <!-- SCRIPT LOGIKA APLIKASI (JAM, TANGGAL, & KARTU) -->
     <!-- ======================================================= -->
     <script>
+        // 1. Script Jam & Kalender Digital
+        function updateClock() {
+            const now = new Date();
+            
+            // Format Waktu (00:00:00)
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('live-time').textContent = `${hours}:${minutes}:${seconds} WIB`;
+
+            // Format Tanggal (Senin, 1 Jan 2026)
+            const hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const bulan = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+            const dateString = `${hari[now.getDay()]}, ${now.getDate()} ${bulan[now.getMonth()]} ${now.getFullYear()}`;
+            document.getElementById('live-date').textContent = dateString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock(); // Panggil pertama kali
+
+        // 2. Data Aplikasi
         const daftarAplikasi = [
             {
                 nama: "SIPERTA",
@@ -130,28 +203,19 @@
                 ikon: "🌐",
                 warnaGlow: "group-hover:shadow-indigo-500/20",
                 bgIkon: "bg-indigo-50 text-indigo-600"
-            },
-            {
-                nama: "Pendataan Indeks Desa",
-                deskripsi: "Pendataan Indeks Desa Gunungsari",
-                link: "https://script.google.com/macros/s/AKfycbxL6z6THc2gANgbd-R1IQScRI27M0L75bkF0fHexLvSGdlky30qUbNU5ADGLnyKB6FcWw/exec",
-                ikon: "🏢",
-                warnaGlow: "group-hover:shadow-indigo-500/20",
-                bgIkon: "bg-indigo-50 text-indigo-600"
             }
         ];
 
-        // Mesin Perender Kartu
+        // 3. Mesin Perender Kartu
         const container = document.getElementById('aplikasi-container');
         
         daftarAplikasi.forEach((app, index) => {
-            const delay = 0.2 + (index * 0.1);
+            const delay = 0.3 + (index * 0.1);
             
             const cardHTML = `
                 <div class="fade-in-up h-full" style="animation-delay: ${delay}s;">
                     <a href="${app.link}" target="_blank" class="group relative flex flex-col h-full bg-white/70 backdrop-blur-xl border border-white shadow-lg ${app.warnaGlow} hover:shadow-2xl rounded-3xl p-7 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
                         
-                        <!-- Efek Hiasan Bulat di Sudut Kanan Atas -->
                         <div class="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-white to-transparent rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
 
                         <div class="relative z-10 flex items-center justify-between mb-5">
@@ -159,7 +223,6 @@
                                 ${app.ikon}
                             </div>
                             
-                            <!-- Ikon Panah yang Muncul saat Hover -->
                             <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-indigo-600 group-hover:text-white shadow-sm transition-all duration-300">
                                 <svg class="w-5 h-5 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
