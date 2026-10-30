@@ -10,172 +10,250 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        
+        /* Background Grid Modern */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: radial-gradient(circle, #cbd5e1 1px, transparent 1px);
+        }
+
+        /* Animasi Cahaya Bergerak */
         @keyframes blob { 0% { transform: translate(0px, 0px) scale(1); } 33% { transform: translate(30px, -50px) scale(1.1); } 66% { transform: translate(-20px, 20px) scale(0.9); } 100% { transform: translate(0px, 0px) scale(1); } }
-        .animate-blob { animation: blob 7s infinite; }
+        .animate-blob { animation: blob 10s infinite alternate; }
         .animation-delay-2000 { animation-delay: 2s; }
         .animation-delay-4000 { animation-delay: 4s; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .fade-in-up { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
+        
+        /* Animasi Muncul Elegan */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .fade-in-up { animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+        
+        /* Animasi Marquee / Running Text */
         .marquee-container { overflow: hidden; white-space: nowrap; width: 100%; }
-        .marquee-content { display: inline-block; animation: marquee 25s linear infinite; }
+        .marquee-content { display: inline-block; animation: marquee 30s linear infinite; }
         .marquee-container:hover .marquee-content { animation-play-state: paused; }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        
+        /* Toast & Modal */
         .toast-enter { transform: translate(-50%, 0); opacity: 1; }
         .toast-leave { transform: translate(-50%, -20px); opacity: 0; pointer-events: none; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
         /* Animasi Logo Melayang */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
-        }
-        .animate-float { animation: float 4s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        .animate-float { animation: float 5s ease-in-out infinite; }
 
-        /* Animasi Kilauan Logo TV untuk Tulisan Keseluruhan */
+        /* Animasi TV Logo Shine Tulisan Portal */
         .tv-logo-shine {
-            background: linear-gradient(
-                120deg, 
-                #4f46e5 0%, 
-                #14b8a6 40%, 
-                #ffffff 50%, 
-                #14b8a6 60%, 
-                #4f46e5 100%
-            );
+            background: linear-gradient( 120deg, #1e293b 0%, #3b82f6 40%, #ffffff 50%, #3b82f6 60%, #1e293b 100% );
             background-size: 200% auto;
             color: transparent;
             -webkit-background-clip: text;
             background-clip: text;
-            animation: shine 3s linear infinite;
+            animation: shine 4s linear infinite;
         }
-        @keyframes shine {
-            to { background-position: 200% center; }
-        }
+        @keyframes shine { to { background-position: 200% center; } }
+        
+        /* Piringan Hitam Berputar */
+        .spin-slow { animation: spin 4s linear infinite; }
+        .spin-paused { animation-play-state: paused; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen relative selection:bg-indigo-500/30">
+<body class="text-slate-800 min-h-screen relative selection:bg-indigo-500/30 overflow-x-hidden">
+
+    <!-- Audio Player (Tersembunyi) -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="tanah_airku.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Tombol Pemutar Musik Floating -->
+    <button id="music-toggle" class="fixed bottom-6 right-6 z-50 bg-white/70 backdrop-blur-xl px-4 py-3 rounded-full shadow-2xl border border-white flex items-center gap-3 hover:scale-105 hover:bg-white transition-all duration-300 group">
+        <div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-slate-900 text-white">
+            <span id="music-icon" class="text-lg spin-paused">💿</span>
+            <div id="music-indicator" class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
+        </div>
+        <div class="text-left pr-2">
+            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-none mb-1">Background Audio</p>
+            <p class="text-sm font-extrabold text-slate-800 leading-none">Tanah Airku</p>
+        </div>
+    </button>
 
     <!-- Notifikasi Melayang -->
-    <div id="notif-pengembangan" class="fixed top-24 left-1/2 toast-leave bg-slate-900/95 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-2xl z-[60] flex items-center gap-3 transition-all duration-300 border border-slate-700">
-        <span class="text-xl">🚧</span>
-        <span class="font-semibold text-sm tracking-wide">Halaman Yang Anda Akses Sedang Dalam Pengembangan</span>
+    <div id="notif-pengembangan" class="fixed top-32 left-1/2 toast-leave bg-slate-900/90 backdrop-blur-xl text-white px-6 py-4 rounded-2xl shadow-2xl z-[60] flex items-center gap-4 transition-all duration-400 border border-slate-700/50">
+        <span class="text-2xl animate-bounce">🚧</span>
+        <span class="font-bold text-sm tracking-wide">Halaman Ini Sedang Dalam Pengembangan</span>
     </div>
 
     <!-- POP-UP MODAL SUB-MENU -->
     <div id="modal-submenu" class="fixed inset-0 z-50 hidden flex items-center justify-center px-4">
-        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onclick="tutupModal()"></div>
-        <!-- Modal Content diubah jadi lebih glassy -->
-        <div id="modal-content" class="relative bg-white/80 backdrop-blur-2xl w-full max-w-lg rounded-[2rem] shadow-2xl border border-white/50 transform scale-95 opacity-0 transition-all duration-300">
-            <div class="p-6 sm:p-8">
-                <div class="flex justify-between items-center mb-6">
+        <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-md transition-opacity" onclick="tutupModal()"></div>
+        <div id="modal-content" class="relative bg-white/80 backdrop-blur-3xl w-full max-w-lg rounded-[2.5rem] shadow-2xl border border-white transform scale-95 opacity-0 transition-all duration-400">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-8">
                     <div class="flex items-center gap-4">
-                        <div id="modal-ikon" class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-black/5"></div>
-                        <h2 id="modal-judul" class="text-2xl font-extrabold text-slate-800"></h2>
+                        <div id="modal-ikon" class="w-16 h-16 rounded-[1.25rem] flex items-center justify-center text-3xl shadow-sm border border-white/60"></div>
+                        <h2 id="modal-judul" class="text-2xl font-extrabold text-slate-800 tracking-tight"></h2>
                     </div>
-                    <button onclick="tutupModal()" class="w-10 h-10 rounded-full bg-white/50 hover:bg-red-100 flex items-center justify-center text-slate-500 hover:text-red-500 transition-colors border border-white/50">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <button onclick="tutupModal()" class="w-12 h-12 rounded-full bg-white/60 hover:bg-red-50 flex items-center justify-center text-slate-400 hover:text-red-500 transition-all shadow-sm border border-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
-                <div id="modal-list-menu" class="flex flex-col gap-3 max-h-[60vh] overflow-y-auto no-scrollbar">
+                <div id="modal-list-menu" class="flex flex-col gap-3 max-h-[55vh] overflow-y-auto no-scrollbar pb-4">
                     <!-- Otomatis diisi oleh script -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Latar Belakang Cahaya Bergerak (Diperkuat intensitas warnanya jadi opacity-80) -->
-    <div class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none flex justify-center items-center overflow-hidden opacity-80">
-        <div class="absolute top-[-10%] left-[-10%] w-[30rem] h-[30rem] bg-indigo-400 rounded-full mix-blend-multiply filter blur-[80px] animate-blob"></div>
-        <div class="absolute top-[20%] right-[-10%] w-[30rem] h-[30rem] bg-teal-400 rounded-full mix-blend-multiply filter blur-[80px] animate-blob animation-delay-2000"></div>
-        <div class="absolute -bottom-32 left-[20%] w-[30rem] h-[30rem] bg-blue-400 rounded-full mix-blend-multiply filter blur-[80px] animate-blob animation-delay-4000"></div>
+    <!-- Latar Belakang Modern (Grid + Cahaya Baur) -->
+    <div class="fixed inset-0 z-0 pointer-events-none bg-grid opacity-40"></div>
+    <div class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none flex justify-center items-center overflow-hidden opacity-60 mix-blend-multiply">
+        <div class="absolute -top-20 -left-20 w-[40rem] h-[40rem] bg-indigo-200 rounded-full filter blur-[100px] animate-blob"></div>
+        <div class="absolute top-[10%] -right-20 w-[35rem] h-[35rem] bg-teal-200 rounded-full filter blur-[100px] animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-40 left-[20%] w-[40rem] h-[40rem] bg-blue-200 rounded-full filter blur-[100px] animate-blob animation-delay-4000"></div>
     </div>
 
-    <!-- Sticky Header -->
-    <header class="sticky top-0 z-40 w-full shadow-sm flex flex-col">
-        <div class="bg-indigo-600 text-white text-xs sm:text-sm font-medium py-1.5 shadow-md z-20">
-            <div class="marquee-container">
-                <div class="marquee-content">
-                    Selamat Datang di Portal Aplikasi Pemerintahan Desa Gunungsari, Kecamatan Cikatomas, Kabupaten Tasikmalaya. | Gunakan sistem ini dengan bijak untuk efisiensi pelayanan masyarakat. | Jam kerja operasional pelayanan: Senin - Jumat (08:00 - 15:30 WIB).
-                </div>
-            </div>
-        </div>
-        <!-- Barisan Navbar dibuat Glassmorphism -->
-        <div class="bg-white/60 backdrop-blur-xl border-b border-white/50 px-4 py-2 transition-all">
-            <div class="max-w-5xl mx-auto flex justify-between items-center">
-                <div class="flex items-center gap-3">
+    <!-- FLOATING ISLAND HEADER (Desain Modern) -->
+    <header class="fixed top-6 left-0 right-0 z-40 px-4 transition-all">
+        <div class="max-w-5xl mx-auto">
+            <!-- Kotak Kaca Mengambang -->
+            <div class="bg-white/60 backdrop-blur-2xl border border-white rounded-[2rem] p-3 flex flex-col sm:flex-row justify-between items-center shadow-[0_8px_30px_rgb(0,0,0,0.06)] gap-4 sm:gap-0">
+                
+                <!-- Profil Kades -->
+                <div class="flex items-center gap-4 bg-white/50 px-4 py-2 rounded-3xl border border-white/60">
                     <div class="relative">
-                        <img src="kades.jpg" alt="Kepala Desa Gunungsari" class="w-10 h-10 rounded-full object-cover border border-white shadow-sm bg-slate-200">
-                        <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+                        <img src="kades.jpg" alt="Kepala Desa Gunungsari" class="w-11 h-11 rounded-full object-cover border-2 border-white shadow-sm bg-slate-200">
+                        <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-400 border-2 border-white rounded-full"></span>
                     </div>
                     <div>
-                        <p class="text-[10px] font-extrabold text-indigo-700 uppercase tracking-wider">Kepala Desa</p>
-                        <p class="text-sm font-bold text-slate-800 leading-tight">Irpan Adri Nugraha, S.P</p>
+                        <p class="text-[9px] font-black text-indigo-500 uppercase tracking-widest mb-0.5">Kepala Desa</p>
+                        <p class="text-sm font-extrabold text-slate-800 leading-none">Irpan Adri Nugraha, S.P</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="hidden sm:block text-2xl text-indigo-500 drop-shadow-sm">⏱️</div>
+
+                <!-- Running Text (Ditaruh di tengah Island) -->
+                <div class="hidden md:block w-96 mx-4 px-4 py-2 bg-slate-900/5 rounded-2xl border border-slate-900/5 overflow-hidden">
+                    <div class="marquee-container text-xs font-semibold text-slate-600">
+                        <div class="marquee-content">
+                            Selamat Datang di Portal Aplikasi Perangkat Desa Gunungsari | Gunakan sistem ini dengan bijak | Jam kerja: Senin - Jumat (08:00 - 15:30 WIB)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jam Digital -->
+                <div class="flex items-center gap-3 bg-white/50 px-5 py-2.5 rounded-3xl border border-white/60">
                     <div class="text-right">
-                        <div id="live-time" class="text-lg font-bold text-slate-800 tabular-nums tracking-tight leading-tight">00:00:00</div>
-                        <div id="live-date" class="text-[10px] font-semibold text-slate-600">Memuat tanggal...</div>
+                        <div id="live-time" class="text-lg font-black text-slate-800 tabular-nums tracking-tighter leading-none mb-1">00:00:00</div>
+                        <div id="live-date" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider leading-none">Memuat...</div>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="relative z-10 max-w-5xl mx-auto px-6 pt-10 pb-12">
-        <div class="text-center mb-12 fade-in-up" style="animation-delay: 0.1s;">
-            <!-- Badge dibuat kaca -->
-            <div class="inline-flex items-center gap-2 bg-white/50 backdrop-blur-md text-indigo-700 text-sm font-bold px-5 py-2 rounded-full mb-10 border border-white/60 shadow-sm cursor-default">
-                <span class="flex h-3 w-3 relative">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+    <main class="relative z-10 max-w-5xl mx-auto px-6 pt-44 pb-20">
+        
+        <!-- BAGIAN JUDUL & LOGO -->
+        <div class="text-center mb-16 fade-in-up" style="animation-delay: 0.1s;">
+            <!-- Badge Modern -->
+            <div class="inline-flex items-center gap-3 bg-white/60 backdrop-blur-xl text-slate-700 text-xs font-extrabold uppercase tracking-widest px-6 py-3 rounded-full mb-12 border border-white shadow-sm">
+                <span class="flex h-2.5 w-2.5 relative">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                 </span>
-                Sistem Portal Aplikasi Perangkat Desa Gunungsari
+                Sistem Terpadu Gunungsari
             </div>
             
             <div class="relative flex justify-center mb-8">
-                <div class="absolute w-32 h-32 bg-gradient-to-r from-yellow-300 via-green-400 to-blue-500 rounded-full blur-2xl opacity-60 animate-pulse"></div>
-                <img src="logo.png" alt="Logo Pemkab Tasikmalaya" class="relative w-28 sm:w-32 h-auto object-contain animate-float drop-shadow-2xl transition-transform duration-500 hover:scale-110 z-10">
+                <div class="absolute w-40 h-40 bg-gradient-to-r from-blue-400 via-teal-300 to-indigo-400 rounded-full blur-3xl opacity-40 animate-pulse"></div>
+                <img src="logo.png" alt="Logo Pemkab Tasikmalaya" class="relative w-32 sm:w-36 h-auto object-contain animate-float drop-shadow-2xl transition-transform duration-700 hover:scale-110 z-10">
             </div>
             
-            <!-- TULISAN PORTAL GUNUNGSARI FULL BERKILAU -->
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight drop-shadow-md">
+            <h1 class="text-5xl md:text-6xl font-black mb-6 tracking-tighter drop-shadow-sm">
                 <span class="tv-logo-shine">Portal Gunungsari</span>
             </h1>
-            <p class="text-slate-600 max-w-xl mx-auto text-lg leading-relaxed font-medium">
-                Pusat akses layanan digital terpadu untuk efisiensi operasional dan administrasi Pemerintahan Desa.
+            <p class="text-slate-500 max-w-lg mx-auto text-lg font-medium leading-relaxed">
+                Pusat akses layanan digital untuk efisiensi operasional dan administrasi Pemerintahan Desa.
             </p>
         </div>
 
-        <div id="aplikasi-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-10">
-            <div id="loading-spinner" class="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col items-center justify-center py-12">
-                <div class="w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
-                <p class="mt-4 text-sm text-slate-600 font-medium animate-pulse">Menghubungkan ke Database Desa...</p>
+        <!-- Wadah Kartu Aplikasi -->
+        <div id="aplikasi-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 pb-10">
+            <!-- Animasi Loading -->
+            <div id="loading-spinner" class="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col items-center justify-center py-16">
+                <div class="w-12 h-12 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin shadow-lg"></div>
+                <p class="mt-6 text-sm text-slate-500 font-bold tracking-wide animate-pulse uppercase">Mensinkronkan Database...</p>
             </div>
         </div>
 
-        <div class="mt-8 pt-8 border-t border-slate-300/50 text-center text-sm text-slate-600 fade-in-up" style="animation-delay: 0.6s;">
-            <p class="font-semibold">© 2026 Pemerintahan Desa Gunungsari</p>
+        <!-- Footer Modern -->
+        <div class="mt-12 pt-8 border-t border-slate-200/60 text-center fade-in-up" style="animation-delay: 0.6s;">
+            <p class="text-sm font-bold text-slate-400">© 2026 Pemerintahan Desa Gunungsari</p>
+            <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-widest">Dikelola oleh Kasipem & Operator Desa</p>
         </div>
     </main>
 
     <script>
-        // 1. Script Jam
+        // =========================================================
+        // 1. SCRIPT MUSIK OTOMATIS & TOMBOL
+        // =========================================================
+        const bgMusic = document.getElementById('bg-music');
+        const musicToggle = document.getElementById('music-toggle');
+        const musicIcon = document.getElementById('music-icon');
+        const musicIndicator = document.getElementById('music-indicator');
+        let isMusicPlaying = false;
+
+        // Fungsi Putar / Jeda
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                musicIcon.classList.replace('spin-slow', 'spin-paused');
+                musicIndicator.classList.replace('bg-emerald-400', 'bg-red-500');
+            } else {
+                bgMusic.play().catch(e => console.log("Menunggu interaksi pengguna"));
+                musicIcon.classList.replace('spin-paused', 'spin-slow');
+                musicIndicator.classList.replace('bg-red-500', 'bg-emerald-400');
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        // Event Tombol Musik
+        musicToggle.addEventListener('click', (e) => {
+            e.stopPropagation(); // Mencegah bentrok dengan klik layar
+            toggleMusic();
+        });
+
+        // Trik Cerdas: Musik otomatis main saat layar pertama kali disentuh/diklik (Mengakali aturan Browser)
+        document.body.addEventListener('click', function playOnFirstInteraction() {
+            if (!isMusicPlaying) {
+                toggleMusic();
+            }
+            // Hapus pendeteksi setelah klik pertama agar tidak mengganggu klik menu
+            document.body.removeEventListener('click', playOnFirstInteraction);
+        }, { once: true });
+
+
+        // =========================================================
+        // 2. SCRIPT JAM DIGITAL
+        // =========================================================
         function updateClock() {
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
-            document.getElementById('live-time').textContent = `${hours}:${minutes}:${seconds} WIB`;
+            document.getElementById('live-time').textContent = `${hours}:${minutes}:${seconds}`;
             const hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
             const bulan = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
             document.getElementById('live-date').textContent = `${hari[now.getDay()]}, ${now.getDate()} ${bulan[now.getMonth()]} ${now.getFullYear()}`;
         }
         setInterval(updateClock, 1000); updateClock(); 
 
-        // 2. Script Notifikasi Pengembangan
+
+        // =========================================================
+        // 3. SCRIPT NOTIFIKASI PENGEMBANGAN
+        // =========================================================
         let notifTimeout;
         function tampilkanNotif(event) {
             if (event) event.preventDefault(); 
@@ -189,11 +267,11 @@
             }, 3000);
         }
 
+
         // =========================================================
-        // 3. MESIN PENARIK DATA DARI GOOGLE SHEETS
+        // 4. MESIN PENARIK DATA DARI GOOGLE SHEETS
         // =========================================================
         const API_URL = "https://script.google.com/macros/s/AKfycbzCJkW4kg8Q7h-I8mBtEdloaLSwe4Krbpz7W75N_ZKsEvP1HKFooXp0-89ngC3FMR8W/exec"; 
-        
         let globalDaftarAplikasi = [];
 
         async function muatDataDariSheets() {
@@ -208,7 +286,6 @@
                 
                 // INJEKSI SUB-MENU OTOMATIS
                 globalDaftarAplikasi.forEach((app) => {
-                    // Cek jika nama ada tulisan "pelayanan"
                     if (app.nama && app.nama.toLowerCase().includes("pelayanan")) {
                         app.subMenu = [
                             { nama: "Surat Keterangan Usaha (SKU)", link: "#" },
@@ -217,7 +294,6 @@
                             { nama: "Pembuatan Pengantar KTP / KK", link: "#" }
                         ];
                     }
-                    // Cek jika nama ada tulisan "penduduk"
                     if (app.nama && app.nama.toLowerCase().includes("penduduk")) {
                         app.subMenu = [
                             { nama: "Input Data Penduduk", link: "#" },
@@ -229,7 +305,7 @@
                     }
                 });
                 
-                // Cetak kartu dengan efek kaca transparan (Glassmorphism)
+                // Render Kartu Aplikasi dengan Desain Soft-Glass Baru
                 globalDaftarAplikasi.forEach((app, index) => {
                     if (!app.nama) return; 
                     
@@ -241,29 +317,31 @@
 
                     if (punyaSubMenu) {
                         atributKlik = `href="javascript:void(0)" onclick="bukaModal(${index})"`;
-                        ikonPanah = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>`;
+                        ikonPanah = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>`;
                     } else {
                         const linkBelumSiap = app.link === "#" || app.link === "" || app.link.includes("MASUKKAN-LINK");
                         atributKlik = linkBelumSiap ? `href="#" onclick="tampilkanNotif(event)"` : `href="${app.link}" target="_blank"`;
-                        ikonPanah = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>`;
+                        ikonPanah = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>`;
                     }
                     
                     const cardHTML = `
                         <div class="fade-in-up h-full" style="animation-delay: ${delay}s;">
-                            <!-- Bagian ini diubah jadi gradient kaca (from-white/70 to-white/20) agar warna latar belakang nembus -->
-                            <a ${atributKlik} class="group relative flex flex-col h-full bg-gradient-to-br from-white/70 to-white/20 backdrop-blur-xl border border-white/50 shadow-lg ${app.warnaGlow} hover:shadow-2xl rounded-3xl p-7 transition-all duration-500 hover:-translate-y-2 overflow-hidden cursor-pointer">
-                                <div class="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-white/50 to-transparent rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
-                                <div class="relative z-10 flex items-center justify-between mb-5">
-                                    <div class="flex-shrink-0 w-16 h-16 ${app.bgIkon} rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-white/40 group-hover:scale-110 transition-transform duration-500">
+                            <a ${atributKlik} class="group relative flex flex-col h-full bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] ${app.warnaGlow} hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] rounded-[2rem] p-7 transition-all duration-500 hover:-translate-y-2 overflow-hidden cursor-pointer">
+                                
+                                <div class="absolute -top-12 -right-12 w-40 h-40 bg-gradient-to-br from-white/80 to-transparent rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
+                                
+                                <div class="relative z-10 flex items-center justify-between mb-6">
+                                    <div class="flex-shrink-0 w-16 h-16 ${app.bgIkon} rounded-[1.25rem] flex items-center justify-center text-3xl shadow-sm border border-white/80 group-hover:scale-110 transition-transform duration-500">
                                         ${app.ikon}
                                     </div>
-                                    <div class="w-10 h-10 rounded-full bg-white/60 flex items-center justify-center text-slate-500 border border-white/40 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-transparent shadow-sm transition-all duration-300">
+                                    <div class="w-10 h-10 rounded-full bg-white/60 flex items-center justify-center text-slate-400 border border-white/80 group-hover:bg-slate-800 group-hover:text-white group-hover:border-transparent shadow-sm transition-all duration-300">
                                         <svg class="w-5 h-5 transform ${punyaSubMenu ? 'group-hover:translate-y-1' : 'group-hover:translate-x-1 group-hover:-translate-y-1'} transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">${ikonPanah}</svg>
                                     </div>
                                 </div>
+                                
                                 <div class="relative z-10 flex-grow">
-                                    <h3 class="text-xl font-bold text-slate-800 group-hover:text-indigo-700 mb-3 transition-colors duration-300">${app.nama}</h3>
-                                    <p class="text-sm font-medium text-slate-600 leading-relaxed">${app.deskripsi}</p>
+                                    <h3 class="text-xl font-extrabold text-slate-800 group-hover:text-slate-900 mb-2 transition-colors duration-300 tracking-tight">${app.nama}</h3>
+                                    <p class="text-[13px] font-semibold text-slate-500 leading-relaxed">${app.deskripsi}</p>
                                 </div>
                             </a>
                         </div>
@@ -275,7 +353,10 @@
             }
         }
 
-        // 4. Fungsi Mengendalikan Modal Sub-Menu
+
+        // =========================================================
+        // 5. MENGENDALIKAN MODAL SUB-MENU
+        // =========================================================
         function bukaModal(index) {
             const app = globalDaftarAplikasi[index];
             const modal = document.getElementById('modal-submenu');
@@ -284,7 +365,7 @@
             document.getElementById('modal-judul').textContent = app.nama;
             const ikonContainer = document.getElementById('modal-ikon');
             ikonContainer.innerHTML = app.ikon;
-            ikonContainer.className = `w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-white/40 ${app.bgIkon}`;
+            ikonContainer.className = `w-16 h-16 rounded-[1.25rem] flex items-center justify-center text-3xl shadow-sm border border-white/80 ${app.bgIkon}`;
 
             const listContainer = document.getElementById('modal-list-menu');
             listContainer.innerHTML = ""; 
@@ -294,10 +375,10 @@
                 const atribut = linkBelumSiap ? `href="#" onclick="tampilkanNotif(event)"` : `href="${sub.link}" target="_blank"`;
                 
                 const htmlList = `
-                    <a ${atribut} class="flex items-center justify-between p-4 bg-white/50 hover:bg-white border border-white/60 hover:border-indigo-300 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 group">
-                        <span class="font-bold text-slate-700 group-hover:text-indigo-600 transition-colors">${sub.nama}</span>
-                        <div class="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-slate-500 border border-white/50 group-hover:bg-indigo-100 group-hover:border-indigo-200 group-hover:text-indigo-600 transition-all">
-                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    <a ${atribut} class="flex items-center justify-between p-4 bg-slate-50/50 hover:bg-white border border-white/60 hover:border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 group">
+                        <span class="font-extrabold text-slate-600 group-hover:text-slate-900 transition-colors">${sub.nama}</span>
+                        <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-slate-400 border border-slate-100 group-hover:bg-slate-800 group-hover:border-slate-800 group-hover:text-white transition-all">
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
                         </div>
                     </a>
                 `;
@@ -320,9 +401,10 @@
             
             setTimeout(() => {
                 modal.classList.add('hidden');
-            }, 300);
+            }, 400);
         }
 
+        // Jalankan saat web dibuka
         muatDataDariSheets();
     </script>
 </body>
