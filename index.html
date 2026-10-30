@@ -23,13 +23,44 @@
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         .toast-enter { transform: translate(-50%, 0); opacity: 1; }
         .toast-leave { transform: translate(-50%, -20px); opacity: 0; pointer-events: none; }
+        
+        /* Sembunyikan scrollbar untuk daftar pop-up */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen relative selection:bg-indigo-500/30">
 
-    <div id="notif-pengembangan" class="fixed top-24 left-1/2 toast-leave bg-slate-900/95 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-2xl z-50 flex items-center gap-3 transition-all duration-300 border border-slate-700">
+    <!-- Notifikasi Melayang -->
+    <div id="notif-pengembangan" class="fixed top-24 left-1/2 toast-leave bg-slate-900/95 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-2xl z-[60] flex items-center gap-3 transition-all duration-300 border border-slate-700">
         <span class="text-xl">🚧</span>
         <span class="font-semibold text-sm tracking-wide">Halaman Yang Anda Akses Sedang Dalam Pengembangan</span>
+    </div>
+
+    <!-- ====================================================================== -->
+    <!-- POP-UP MODAL SUB-MENU (Disembunyikan secara default) -->
+    <!-- ====================================================================== -->
+    <div id="modal-submenu" class="fixed inset-0 z-50 hidden flex items-center justify-center px-4">
+        <!-- Latar Gelap -->
+        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onclick="tutupModal()"></div>
+        <!-- Kotak Pop-up -->
+        <div id="modal-content" class="relative bg-white/95 backdrop-blur-2xl w-full max-w-lg rounded-[2rem] shadow-2xl border border-white/60 transform scale-95 opacity-0 transition-all duration-300">
+            <div class="p-6 sm:p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex items-center gap-4">
+                        <div id="modal-ikon" class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-black/5"></div>
+                        <h2 id="modal-judul" class="text-2xl font-extrabold text-slate-800"></h2>
+                    </div>
+                    <button onclick="tutupModal()" class="w-10 h-10 rounded-full bg-slate-100 hover:bg-red-100 flex items-center justify-center text-slate-500 hover:text-red-500 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                <!-- Daftar Sub-menu Pelayanan -->
+                <div id="modal-list-menu" class="flex flex-col gap-3 max-h-[60vh] overflow-y-auto no-scrollbar">
+                    <!-- Otomatis diisi oleh script -->
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Latar Belakang Cahaya Bergerak -->
@@ -95,9 +126,8 @@
             </p>
         </div>
 
-        <!-- Wadah Kartu Aplikasi & Loading Spinner -->
         <div id="aplikasi-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-10">
-            <!-- Animasi Loading (Tampil sesaat sebelum data Excel masuk) -->
+            <!-- Animasi Loading -->
             <div id="loading-spinner" class="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col items-center justify-center py-12">
                 <div class="w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
                 <p class="mt-4 text-sm text-slate-500 font-medium animate-pulse">Menghubungkan ke Database Desa...</p>
@@ -126,7 +156,7 @@
         // 2. Script Notifikasi Pengembangan
         let notifTimeout;
         function tampilkanNotif(event) {
-            event.preventDefault(); 
+            if (event) event.preventDefault(); 
             const notif = document.getElementById('notif-pengembangan');
             notif.classList.remove('toast-leave');
             notif.classList.add('toast-enter');
@@ -138,12 +168,15 @@
         }
 
         // =========================================================
-        // 3. MESIN PENARIK DATA DARI GOOGLE SHEETS
+        // 3. MESIN PENARIK DATA DARI GOOGLE SHEETS + SUB MENU
         // =========================================================
         
-        // GANTI TULISAN DI BAWAH INI DENGAN LINK APPS SCRIPT BAPAK!
+        // Link Apps Script Bapak sudah dimasukkan di sini
         const API_URL = "https://script.google.com/macros/s/AKfycbzCJkW4kg8Q7h-I8mBtEdloaLSwe4Krbpz7W75N_ZKsEvP1HKFooXp0-89ngC3FMR8W/exec"; 
         
+        // Variabel global untuk menyimpan data aplikasi
+        let globalDaftarAplikasi = [];
+
         async function muatDataDariSheets() {
             const container = document.getElementById('aplikasi-container');
             const spinner = document.getElementById('loading-spinner');
@@ -151,19 +184,43 @@
             try {
                 // Tarik data dari Google Sheets
                 const response = await fetch(API_URL);
-                const daftarAplikasi = await response.json();
+                globalDaftarAplikasi = await response.json();
                 
                 // Matikan animasi loading
                 spinner.style.display = 'none'; 
                 
+                // INJEKSI SUB-MENU OTOMATIS: 
+                // Jika aplikasinya bernama "Dashboard Pelayanan", tambahkan sub-menu
+                globalDaftarAplikasi.forEach((app) => {
+                    if (app.nama && app.nama.toLowerCase().includes("pelayanan")) {
+                        app.subMenu = [
+                            { nama: "Surat Keterangan Usaha (SKU)", link: "#" },
+                            { nama: "Surat Pengantar Nikah", link: "#" },
+                            { nama: "Surat Keterangan Domisili", link: "#" },
+                            { nama: "Pembuatan Pengantar KTP / KK", link: "#" }
+                        ];
+                    }
+                });
+                
                 // Cetak kartu aplikasi satu per satu
-                daftarAplikasi.forEach((app, index) => {
-                    const delay = 0.2 + (index * 0.1);
-                    const linkBelumSiap = app.link === "#" || app.link === "" || app.link.includes("MASUKKAN-LINK");
+                globalDaftarAplikasi.forEach((app, index) => {
+                    if (!app.nama) return; // Abaikan jika baris kosong
                     
-                    const atributKlik = linkBelumSiap 
-                        ? `href="#" onclick="tampilkanNotif(event)"` 
-                        : `href="${app.link}" target="_blank"`;
+                    const delay = 0.2 + (index * 0.1);
+                    const punyaSubMenu = app.subMenu && app.subMenu.length > 0;
+                    
+                    let atributKlik = "";
+                    let ikonPanah = "";
+
+                    // Logika klik: Buka modal jika ada submenu, atau buka link jika tidak
+                    if (punyaSubMenu) {
+                        atributKlik = `href="javascript:void(0)" onclick="bukaModal(${index})"`;
+                        ikonPanah = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>`; // Panah ke bawah
+                    } else {
+                        const linkBelumSiap = app.link === "#" || app.link === "" || app.link.includes("MASUKKAN-LINK");
+                        atributKlik = linkBelumSiap ? `href="#" onclick="tampilkanNotif(event)"` : `href="${app.link}" target="_blank"`;
+                        ikonPanah = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>`; // Panah ke atas
+                    }
                     
                     const cardHTML = `
                         <div class="fade-in-up h-full" style="animation-delay: ${delay}s;">
@@ -174,7 +231,7 @@
                                         ${app.ikon}
                                     </div>
                                     <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-indigo-600 group-hover:text-white shadow-sm transition-all duration-300">
-                                        <svg class="w-5 h-5 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                                        <svg class="w-5 h-5 transform ${punyaSubMenu ? 'group-hover:translate-y-1' : 'group-hover:translate-x-1 group-hover:-translate-y-1'} transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">${ikonPanah}</svg>
                                     </div>
                                 </div>
                                 <div class="relative z-10 flex-grow">
@@ -187,12 +244,59 @@
                     container.innerHTML += cardHTML;
                 });
             } catch (error) {
-                // Tampilkan pesan error jika link salah
                 spinner.innerHTML = `<p class="text-red-500 font-bold text-sm text-center">Gagal memuat database.<br>Pastikan Link Apps Script sudah dimasukkan dengan benar.</p>`;
             }
         }
 
-        // Jalankan mesin penarik data saat web dibuka
+        // 4. Fungsi Mengendalikan Modal Sub-Menu
+        function bukaModal(index) {
+            const app = globalDaftarAplikasi[index];
+            const modal = document.getElementById('modal-submenu');
+            const content = document.getElementById('modal-content');
+            
+            document.getElementById('modal-judul').textContent = app.nama;
+            const ikonContainer = document.getElementById('modal-ikon');
+            ikonContainer.innerHTML = app.ikon;
+            ikonContainer.className = `w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-black/5 ${app.bgIkon}`;
+
+            const listContainer = document.getElementById('modal-list-menu');
+            listContainer.innerHTML = ""; 
+            
+            app.subMenu.forEach(sub => {
+                const linkBelumSiap = sub.link === "#" || sub.link === "";
+                const atribut = linkBelumSiap ? `href="#" onclick="tampilkanNotif(event)"` : `href="${sub.link}" target="_blank"`;
+                
+                const htmlList = `
+                    <a ${atribut} class="flex items-center justify-between p-4 bg-slate-50/80 hover:bg-white border border-slate-200/60 hover:border-indigo-300 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 group">
+                        <span class="font-bold text-slate-700 group-hover:text-indigo-600 transition-colors">${sub.nama}</span>
+                        <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-all">
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                    </a>
+                `;
+                listContainer.innerHTML += htmlList;
+            });
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function tutupModal() {
+            const modal = document.getElementById('modal-submenu');
+            const content = document.getElementById('modal-content');
+            
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Jalankan penarikan data saat awal web dibuka
         muatDataDariSheets();
     </script>
 </body>
