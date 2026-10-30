@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
-<head><title>Portal Internal - Desa Gunungsari</title>
-    
-    <!-- Kode Favicon Otomatis -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Apps - Desa Gunungsari</title>
+    
+    <!-- Kode Favicon Otomatis (Ikon Gedung di Tab Browser) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Import Font Premium: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -72,7 +73,7 @@
     <div class="relative z-20 bg-indigo-600 text-white text-sm font-medium py-2 shadow-md">
         <div class="marquee-container">
             <div class="marquee-content">
-                Selamat Datang di Portal Apps Pemerintahan Desa Gunungsari, Kecamatan Cikatomas, Kabupaten Tasikmalaya. | Gunakan sistem ini dengan bijak untuk efisiensi pelayanan masyarakat. | Jam kerja operasional pelayanan: Senin - Jumat (08:00 - 15:30 WIB).
+                Selamat Datang di Portal Aplikasi Pemerintahan Desa Gunungsari, Kecamatan Cikatomas, Kabupaten Tasikmalaya. | Gunakan sistem ini dengan bijak untuk efisiensi pelayanan masyarakat. | Jam kerja operasional pelayanan: Senin - Jumat (08:00 - 15:30 WIB).
             </div>
         </div>
     </div>
@@ -85,8 +86,8 @@
             <!-- Profil Kepala Desa -->
             <div class="flex items-center gap-4 bg-white/70 backdrop-blur-md px-5 py-3 rounded-2xl shadow-sm border border-white hover:shadow-md transition-shadow">
                 <div class="relative">
-                    <!-- Foto Kepala Desa -->
-                    <img src=<img src="kades.jpg" alt="Kepala Desa Gunungsari" class="w-14 h-14 rounded-full object-cover border-2 border-indigo-500 shadow-sm">
+                    <!-- FOTO KEPALA DESA (Link sudah disesuaikan persis dengan file di GitHub) -->
+                    <img src="kades.jpg" alt="Kepala Desa Gunungsari" class="w-14 h-14 rounded-full object-cover border-2 border-indigo-500 shadow-sm bg-slate-200">
                     <span class="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></span>
                 </div>
                 <div>
@@ -150,20 +151,18 @@
         function updateClock() {
             const now = new Date();
             
-            // Format Waktu (00:00:00)
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
             document.getElementById('live-time').textContent = `${hours}:${minutes}:${seconds} WIB`;
 
-            // Format Tanggal (Senin, 1 Jan 2026)
             const hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
             const bulan = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
             const dateString = `${hari[now.getDay()]}, ${now.getDate()} ${bulan[now.getMonth()]} ${now.getFullYear()}`;
             document.getElementById('live-date').textContent = dateString;
         }
         setInterval(updateClock, 1000);
-        updateClock(); // Panggil pertama kali
+        updateClock(); 
 
         // 2. Data Aplikasi
         const daftarAplikasi = [
