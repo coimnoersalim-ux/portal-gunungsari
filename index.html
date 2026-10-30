@@ -25,6 +25,15 @@
         .toast-leave { transform: translate(-50%, -20px); opacity: 0; pointer-events: none; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Animasi Logo Melayang */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen relative selection:bg-indigo-500/30">
@@ -96,8 +105,8 @@
     </header>
 
     <main class="relative z-10 max-w-5xl mx-auto px-6 pt-10 pb-12">
-        <div class="text-center mb-16 fade-in-up" style="animation-delay: 0.1s;">
-            <div class="inline-flex items-center gap-2 bg-white/80 backdrop-blur-md text-indigo-700 text-sm font-bold px-5 py-2 rounded-full mb-8 border border-white shadow-sm cursor-default">
+        <div class="text-center mb-12 fade-in-up" style="animation-delay: 0.1s;">
+            <div class="inline-flex items-center gap-2 bg-white/80 backdrop-blur-md text-indigo-700 text-sm font-bold px-5 py-2 rounded-full mb-10 border border-white shadow-sm cursor-default">
                 <span class="flex h-3 w-3 relative">
                   <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
                   <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
@@ -105,10 +114,12 @@
                 Sistem Portal Aplikasi Perangkat Desa Gunungsari
             </div>
             
-            <div class="flex justify-center mb-6">
-                <div class="relative inline-flex items-center justify-center w-24 h-24 bg-white rounded-3xl shadow-xl border border-white/50 transform -rotate-3 transition-transform duration-300">
-                    <span class="text-5xl drop-shadow-sm">🏛️</span>
-                </div>
+            <!-- BAGIAN LOGO YANG DIBUAT HIDUP -->
+            <div class="relative flex justify-center mb-8">
+                <!-- Pendaran cahaya (Glow) di belakang logo -->
+                <div class="absolute w-32 h-32 bg-gradient-to-r from-yellow-300 via-green-400 to-blue-500 rounded-full blur-2xl opacity-60 animate-pulse"></div>
+                <!-- Logo yang melayang -->
+                <img src="logo.jpg" alt="Logo Pemkab Tasikmalaya" class="relative w-28 sm:w-32 h-auto object-contain animate-float drop-shadow-2xl transition-transform duration-500 hover:scale-110 z-10">
             </div>
             
             <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-slate-900 tracking-tight drop-shadow-sm">
@@ -163,8 +174,6 @@
         // =========================================================
         // 3. MESIN PENARIK DATA DARI GOOGLE SHEETS
         // =========================================================
-        
-        // Link API Google Sheets
         const API_URL = "https://script.google.com/macros/s/AKfycbzCJkW4kg8Q7h-I8mBtEdloaLSwe4Krbpz7W75N_ZKsEvP1HKFooXp0-89ngC3FMR8W/exec"; 
         
         let globalDaftarAplikasi = [];
@@ -179,31 +188,26 @@
                 
                 spinner.style.display = 'none'; 
                 
-                // INJEKSI SUB-MENU OTOMATIS: 
                 globalDaftarAplikasi.forEach((app) => {
-                    // Sub-menu untuk "Dashboard Pelayanan"
                     if (app.nama && app.nama.toLowerCase().includes("pelayanan")) {
                         app.subMenu = [
-                            { nama: "Surat Keterangan Usaha (SKU)", link: "https://docs.google.com/forms/d/1P3uHnv9dlSKD2MfAZhc81aio0opgU761dEaQuB7U4D0/edit" },
-                            { nama: "Surat Keterangan Domisili", link: "https://docs.google.com/forms/d/1KbTc9E7kxuGOw99cYf7bv4HJvxJmdi3L-QL4BP5IqXM/edit" },
+                            { nama: "Surat Keterangan Usaha (SKU)", link: "#" },
                             { nama: "Surat Pengantar Nikah", link: "#" },
+                            { nama: "Surat Keterangan Domisili", link: "#" },
                             { nama: "Pembuatan Pengantar KTP / KK", link: "#" }
                         ];
                     }
-                    
-                    // Sub-menu untuk "Updating Data Penduduk"
                     if (app.nama && app.nama.toLowerCase().includes("penduduk")) {
                         app.subMenu = [
-                            { nama: "Input Data Penduduk", link: "https://docs.google.com/forms/d/1YxAvOKRA8JqZcqImE97mWg6V_z4UzF9-ix_DnY4lvYA/edit" },
-                            { nama: "Kelahiran", link: "https://docs.google.com/forms/d/1K62sT0z60CWiU74C5nX0X5CX-S09RM89tZz9THqvbrs/edit" },
-                            { nama: "Kematian", link: "https://docs.google.com/forms/d/1rVtwcVAGHeRtfjHWn3YSkGIiOHLK8EHd6BuERh-j_Qs/edit" },
+                            { nama: "Input Data Penduduk", link: "#" },
+                            { nama: "Kelahiran", link: "#" },
+                            { nama: "Kematian", link: "#" },
                             { nama: "Kepindahan", link: "#" },
                             { nama: "Penduduk Masuk", link: "#" }
                         ];
                     }
                 });
                 
-                // Cetak kartu aplikasi satu per satu
                 globalDaftarAplikasi.forEach((app, index) => {
                     if (!app.nama) return; 
                     
