@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Internal - Desa Gunungsari</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen relative overflow-x-hidden">
+
+    <!-- Efek Latar Belakang -->
+    <div class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none opacity-40">
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
+        <div class="absolute top-[20%] right-[-10%] w-96 h-96 bg-slate-300 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
+    </div>
+
+    <div class="relative z-10 max-w-5xl mx-auto px-6 py-12">
+        
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="inline-flex items-center gap-2 bg-red-100 text-red-700 text-xs font-bold px-4 py-1.5 rounded-full mb-6 border border-red-200 shadow-sm">
+                <span>🔒</span> Akses Terbatas Khusus Perangkat Desa
+            </div>
+            
+            <div class="flex justify-center mb-4">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full shadow-md border border-gray-100">
+                    <span class="text-4xl">🏢</span>
+                </div>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Portal Internal Gunungsari</h1>
+            <p class="text-gray-600 max-w-xl mx-auto">Pusat akses sistem informasi dan operasional administrasi terpadu Pemerintahan Desa Gunungsari.</p>
+        </div>
+
+        <!-- Container untuk Menu Aplikasi -->
+        <div id="aplikasi-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Kartu menu dimunculkan oleh script -->
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-16 text-center text-sm text-gray-500">
+            <p>&copy; 2026 Pemerintahan Desa Gunungsari. Dikelola oleh Kasipem & Operator Desa.</p>
+        </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- SCRIPT PENGATURAN MENU (UBAH LINK APLIKASI DI SINI) -->
+    <!-- ======================================================= -->
+    <script>
+        const daftarAplikasi = [
+            {
+                nama: "SIPERTA",
+                deskripsi: "Manajemen data kepemilikan dan klasifikasi lahan desa.",
+                link: "MASUKKAN-LINK-VERCEL-SIPERTA-DISINI", // Ganti teks ini
+                ikon: "🗺️", 
+                warnaIkon: "bg-emerald-100 text-emerald-600"
+            },
+            {
+                nama: "Sistem Kearsipan",
+                deskripsi: "Database surat masuk/keluar dan arsip administrasi kependudukan.",
+                link: "MASUKKAN-LINK-GOOGLE-APPS-SCRIPT-DISINI", // Ganti teks ini
+                ikon: "📂",
+                warnaIkon: "bg-blue-100 text-blue-600"
+            },
+            {
+                nama: "Dashboard Pelayanan",
+                deskripsi: "Panel operator untuk memproses permohonan layanan satu pintu.",
+                link: "MASUKKAN-LINK-APPSHEET-DISINI", // Ganti teks ini
+                ikon: "💻",
+                warnaIkon: "bg-purple-100 text-purple-600"
+            },
+            {
+                nama: "Rekap PBB-P2",
+                deskripsi: "Monitoring progres penagihan dan pelunasan pajak bumi bangunan.",
+                link: "MASUKKAN-LINK-PBB-DISINI", // Ganti teks ini atau gunakan # jika belum ada
+                ikon: "💳",
+                warnaIkon: "bg-rose-100 text-rose-600"
+            }
+        ];
+
+        // MESIN PEMBUAT TAMPILAN
+        const container = document.getElementById('aplikasi-container');
+        
+        daftarAplikasi.forEach(app => {
+            const cardHTML = `
+                <a href="${app.link}" target="_blank" class="group block p-6 bg-white/80 backdrop-blur-md border border-white/60 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    <div class="flex items-start space-x-4">
+                        <div class="flex-shrink-0 w-12 h-12 ${app.warnaIkon} rounded-xl flex items-center justify-center text-2xl shadow-inner transition-transform group-hover:scale-110">
+                            ${app.ikon}
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">${app.nama}</h3>
+                            <p class="text-sm text-gray-600 mt-1 leading-relaxed">${app.deskripsi}</p>
+                        </div>
+                    </div>
+                </a>
+            `;
+            container.innerHTML += cardHTML;
+        });
+    </script>
+</body>
+</html>
