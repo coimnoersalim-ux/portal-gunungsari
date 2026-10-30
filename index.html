@@ -61,7 +61,7 @@
         .toast-leave { transform: translate(-50%, -20px); opacity: 0; pointer-events: none; }
     </style>
 </head>
-<!-- PENTING: overflow-x-hidden sudah dihapus dari body agar sticky berfungsi -->
+<!-- PENTING: overflow-x-hidden sengaja tidak dipakai agar sticky berfungsi -->
 <body class="bg-slate-50 text-slate-800 min-h-screen relative selection:bg-indigo-500/30">
 
     <!-- Notifikasi Melayang (Tampil saat menu belum siap) -->
@@ -91,7 +91,7 @@
             </div>
         </div>
 
-        <!-- Top Bar Navigasi (Profil & Jam yang dirapikan) -->
+        <!-- Top Bar Navigasi (Profil & Jam) -->
         <div class="bg-white/85 backdrop-blur-xl border-b border-slate-200/50 px-4 py-2 transition-all">
             <div class="max-w-5xl mx-auto flex justify-between items-center">
                 
@@ -197,7 +197,7 @@
             }, 3000);
         }
 
-        // 3. Data Aplikasi
+        // 3. Data Aplikasi (Edit link aplikasinya di sini ke depannya)
         const daftarAplikasi = [
             {
                 nama: "SIPERTA",
@@ -218,7 +218,7 @@
             {
                 nama: "Dashboard Pelayanan",
                 deskripsi: "Panel operator untuk memproses permohonan layanan satu pintu.",
-                link: "#", 
+                link: "#", // Isi pager (#) otomatis memicu notif pengembangan
                 ikon: "💻",
                 warnaGlow: "group-hover:shadow-purple-500/20",
                 bgIkon: "bg-purple-50 text-purple-600"
@@ -226,7 +226,7 @@
             {
                 nama: "Rekap PBB-P2",
                 deskripsi: "Monitoring progres penagihan dan status pelunasan pajak.",
-                link: "#", 
+                link: "#", // Isi pager (#) otomatis memicu notif pengembangan
                 ikon: "💳",
                 warnaGlow: "group-hover:shadow-rose-500/20",
                 bgIkon: "bg-rose-50 text-rose-600"
