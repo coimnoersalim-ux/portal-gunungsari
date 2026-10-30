@@ -23,8 +23,6 @@
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         .toast-enter { transform: translate(-50%, 0); opacity: 1; }
         .toast-leave { transform: translate(-50%, -20px); opacity: 0; pointer-events: none; }
-        
-        /* Sembunyikan scrollbar untuk daftar pop-up */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
@@ -37,13 +35,9 @@
         <span class="font-semibold text-sm tracking-wide">Halaman Yang Anda Akses Sedang Dalam Pengembangan</span>
     </div>
 
-    <!-- ====================================================================== -->
-    <!-- POP-UP MODAL SUB-MENU (Disembunyikan secara default) -->
-    <!-- ====================================================================== -->
+    <!-- POP-UP MODAL SUB-MENU -->
     <div id="modal-submenu" class="fixed inset-0 z-50 hidden flex items-center justify-center px-4">
-        <!-- Latar Gelap -->
         <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onclick="tutupModal()"></div>
-        <!-- Kotak Pop-up -->
         <div id="modal-content" class="relative bg-white/95 backdrop-blur-2xl w-full max-w-lg rounded-[2rem] shadow-2xl border border-white/60 transform scale-95 opacity-0 transition-all duration-300">
             <div class="p-6 sm:p-8">
                 <div class="flex justify-between items-center mb-6">
@@ -55,7 +49,6 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
-                <!-- Daftar Sub-menu Pelayanan -->
                 <div id="modal-list-menu" class="flex flex-col gap-3 max-h-[60vh] overflow-y-auto no-scrollbar">
                     <!-- Otomatis diisi oleh script -->
                 </div>
@@ -168,13 +161,12 @@
         }
 
         // =========================================================
-        // 3. MESIN PENARIK DATA DARI GOOGLE SHEETS + SUB MENU
+        // 3. MESIN PENARIK DATA DARI GOOGLE SHEETS
         // =========================================================
         
-        // Link Apps Script Bapak sudah dimasukkan di sini
+        // Link API Google Sheets
         const API_URL = "https://script.google.com/macros/s/AKfycbzCJkW4kg8Q7h-I8mBtEdloaLSwe4Krbpz7W75N_ZKsEvP1HKFooXp0-89ngC3FMR8W/exec"; 
         
-        // Variabel global untuk menyimpan data aplikasi
         let globalDaftarAplikasi = [];
 
         async function muatDataDariSheets() {
@@ -182,16 +174,14 @@
             const spinner = document.getElementById('loading-spinner');
             
             try {
-                // Tarik data dari Google Sheets
                 const response = await fetch(API_URL);
                 globalDaftarAplikasi = await response.json();
                 
-                // Matikan animasi loading
                 spinner.style.display = 'none'; 
                 
                 // INJEKSI SUB-MENU OTOMATIS: 
-                // Jika aplikasinya bernama "Dashboard Pelayanan", tambahkan sub-menu
                 globalDaftarAplikasi.forEach((app) => {
+                    // Sub-menu untuk "Dashboard Pelayanan"
                     if (app.nama && app.nama.toLowerCase().includes("pelayanan")) {
                         app.subMenu = [
                             { nama: "Surat Keterangan Usaha (SKU)", link: "#" },
@@ -200,11 +190,22 @@
                             { nama: "Pembuatan Pengantar KTP / KK", link: "#" }
                         ];
                     }
+                    
+                    // Sub-menu untuk "Updating Data Penduduk"
+                    if (app.nama && app.nama.toLowerCase().includes("penduduk")) {
+                        app.subMenu = [
+                            { nama: "Input Data Penduduk", link: "#" },
+                            { nama: "Kelahiran", link: "#" },
+                            { nama: "Kematian", link: "#" },
+                            { nama: "Kepindahan", link: "#" },
+                            { nama: "Penduduk Masuk", link: "#" }
+                        ];
+                    }
                 });
                 
                 // Cetak kartu aplikasi satu per satu
                 globalDaftarAplikasi.forEach((app, index) => {
-                    if (!app.nama) return; // Abaikan jika baris kosong
+                    if (!app.nama) return; 
                     
                     const delay = 0.2 + (index * 0.1);
                     const punyaSubMenu = app.subMenu && app.subMenu.length > 0;
@@ -212,14 +213,13 @@
                     let atributKlik = "";
                     let ikonPanah = "";
 
-                    // Logika klik: Buka modal jika ada submenu, atau buka link jika tidak
                     if (punyaSubMenu) {
                         atributKlik = `href="javascript:void(0)" onclick="bukaModal(${index})"`;
-                        ikonPanah = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>`; // Panah ke bawah
+                        ikonPanah = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>`;
                     } else {
                         const linkBelumSiap = app.link === "#" || app.link === "" || app.link.includes("MASUKKAN-LINK");
                         atributKlik = linkBelumSiap ? `href="#" onclick="tampilkanNotif(event)"` : `href="${app.link}" target="_blank"`;
-                        ikonPanah = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>`; // Panah ke atas
+                        ikonPanah = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>`;
                     }
                     
                     const cardHTML = `
@@ -296,7 +296,6 @@
             }, 300);
         }
 
-        // Jalankan penarikan data saat awal web dibuka
         muatDataDariSheets();
     </script>
 </body>
